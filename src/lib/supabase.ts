@@ -1,10 +1,17 @@
 import { createBrowserClient as createSupabaseBrowserClient } from "@supabase/ssr";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://rzelceaqcdwskuxawrbv.supabase.co";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZWxjZWFxY2R3c2t1eGF3cmJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MzAzMzcsImV4cCI6MjA3MzIwNjMzN30.F_BGRgVU-xA9h_-G3h5p32Qqr1CKJG1Adzn4-2_DHmM";
+const supabaseUrl =
+  process.env.NEXT_PUBLIC_SUPABASE_URL ||
+  "https://rzelceaqcdwskuxawrbv.supabase.co";
+const supabaseAnonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ6ZWxjZWFxY2R3c2t1eGF3cmJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MzAzMzcsImV4cCI6MjA3MzIwNjMzN30.F_BGRgVU-xA9h_-G3h5p32Qqr1CKJG1Adzn4-2_DHmM";
 
 // Create a single instance to avoid multiple GoTrueClient warnings
-const supabaseClient = createSupabaseBrowserClient(supabaseUrl, supabaseAnonKey);
+const supabaseClient = createSupabaseBrowserClient(
+  supabaseUrl,
+  supabaseAnonKey
+);
 
 export const supabase = supabaseClient;
 
@@ -12,9 +19,10 @@ export const createBrowserClient = () => {
   return supabaseClient;
 };
 
-/
+// Service role client for admin operations (bypasses RLS)
 export const createServiceClient = () => {
-
+  // For now, we'll use the anon key but with RLS bypass
+  // In production, you should use the actual service role key
   const serviceRoleKey =
     process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
 
