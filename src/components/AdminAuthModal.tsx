@@ -36,7 +36,7 @@ export default function AdminAuthModal({
       } else {
         setError("Invalid username or password");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred during authentication");
     } finally {
       setLoading(false);

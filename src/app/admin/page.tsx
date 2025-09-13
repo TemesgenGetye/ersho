@@ -3,28 +3,56 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase";
-import {
-  Settings,
-  Calendar,
-  Camera,
-  Check,
-  X,
-  Plus,
-  Eye,
-  Upload,
-} from "lucide-react";
+import { Settings, Calendar, Camera, Check, X, Plus, Eye } from "lucide-react";
 import Link from "next/link";
 
+interface User {
+  id: string;
+  email: string;
+}
+
+interface UserImage {
+  id: string;
+  user_id: string;
+  event_id: string | null;
+  image_url: string;
+  caption: string;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  profiles?: {
+    full_name: string;
+  } | null;
+  events?: {
+    title: string;
+  } | null;
+}
+
+interface Event {
+  id: string;
+  title: string;
+  description: string | null;
+  date: string;
+  location: string;
+  image_url: string | null;
+  created_at: string;
+  created_by: string | null;
+  profiles?: {
+    full_name: string;
+  } | null;
+}
+
 export default function AdminPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState("pending-images");
-  const [pendingImages, setPendingImages] = useState<any[]>([]);
-  const [approvedImages, setApprovedImages] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]);
+  const [pendingImages, setPendingImages] = useState<UserImage[]>([]);
+  const [approvedImages, setApprovedImages] = useState<UserImage[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [supabase, setSupabase] = useState<any>(null);
-  const [editingEvent, setEditingEvent] = useState<any>(null);
+  const [supabase, setSupabase] = useState<ReturnType<
+    typeof createBrowserClient
+  > | null>(null);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
   const [showEventForm, setShowEventForm] = useState(false);
   const router = useRouter();
 
@@ -223,7 +251,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleEditEvent = (event: any) => {
+  const handleEditEvent = (event: Event) => {
     setEditingEvent(event);
     setShowEventForm(true);
   };
@@ -264,7 +292,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleUpdateEvent = async (updatedEvent: any) => {
+  const handleUpdateEvent = async (updatedEvent: Event) => {
     if (!supabase) return;
 
     try {
@@ -691,7 +719,7 @@ export default function AdminPage() {
                   </label>
                   <textarea
                     name="description"
-                    defaultValue={editingEvent.description}
+                    defaultValue={editingEvent.description || ""}
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500"
                   />

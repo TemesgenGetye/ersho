@@ -6,9 +6,25 @@ import { createBrowserClient } from "@/lib/supabase";
 import { Camera, Upload, X, Check } from "lucide-react";
 import Link from "next/link";
 
+interface User {
+  id: string;
+  email: string;
+}
+
+interface Event {
+  id: string;
+  title: string;
+  description: string | null;
+  date: string;
+  location: string;
+  image_url: string | null;
+  created_at: string;
+  created_by: string | null;
+}
+
 export default function SubmitImagePage() {
-  const [user, setUser] = useState<any>(null);
-  const [events, setEvents] = useState<any[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
   const [selectedEvent, setSelectedEvent] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [caption, setCaption] = useState("");
@@ -27,7 +43,10 @@ export default function SubmitImagePage() {
         router.push("/");
         return;
       }
-      setUser(user);
+      setUser({
+        id: user.id,
+        email: user.email || "",
+      });
     };
 
     const getEvents = async () => {
@@ -55,7 +74,7 @@ export default function SubmitImagePage() {
         {
           id: user.id,
           email: user.email || "",
-          full_name: user.user_metadata?.full_name || "",
+          full_name: "",
           role: "user",
         },
         {

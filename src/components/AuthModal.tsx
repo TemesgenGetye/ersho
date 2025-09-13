@@ -38,8 +38,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         onClose();
         setSuccess(false);
       }, 3000);
-    } catch (err: any) {
-      setError(err.message || "An error occurred");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md mb-4">
                 <h3 className="font-medium mb-1">Check your email!</h3>
                 <p className="text-sm">
-                  We've sent you a magic link to{" "}
+                  We&apos;ve sent you a magic link to{" "}
                   {isSignUp ? "create your account" : "sign in"}.
                 </p>
               </div>
@@ -149,7 +149,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 <p className="text-sm text-gray-600">
                   {isSignUp
                     ? "Already have an account?"
-                    : "Don't have an account?"}{" "}
+                    : "Don&apos;t have an account?"}{" "}
                   <button
                     type="button"
                     onClick={() => {

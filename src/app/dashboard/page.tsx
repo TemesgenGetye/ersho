@@ -6,10 +6,31 @@ import { createBrowserClient } from "@/lib/supabase";
 import { Camera, Clock, Check, X, Eye } from "lucide-react";
 import Link from "next/link";
 
+interface User {
+  id: string;
+  email: string;
+}
+
+interface UserImage {
+  id: string;
+  user_id: string;
+  event_id: string | null;
+  image_url: string;
+  caption: string;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  profiles?: {
+    full_name: string;
+  } | null;
+  events?: {
+    title: string;
+  } | null;
+}
+
 export default function DashboardPage() {
-  const [user, setUser] = useState<any>(null);
-  const [pendingImages, setPendingImages] = useState<any[]>([]);
-  const [approvedImages, setApprovedImages] = useState<any[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [pendingImages, setPendingImages] = useState<UserImage[]>([]);
+  const [approvedImages, setApprovedImages] = useState<UserImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -24,7 +45,10 @@ export default function DashboardPage() {
         router.push("/");
         return;
       }
-      setUser(user);
+      setUser({
+        id: user.id,
+        email: user.email || "",
+      });
     };
 
     getUser();

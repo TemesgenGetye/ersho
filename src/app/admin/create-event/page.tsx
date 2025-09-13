@@ -8,17 +8,22 @@ import {
   Upload,
   X,
   Calendar,
-  MapPin,
-  FileText,
   Image as ImageIcon,
 } from "lucide-react";
 import Link from "next/link";
 
+interface User {
+  id: string;
+  email: string;
+}
+
 export default function CreateEventPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [supabase, setSupabase] = useState<any>(null);
+  const [supabase, setSupabase] = useState<ReturnType<
+    typeof createBrowserClient
+  > | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -80,8 +85,8 @@ export default function CreateEventPage() {
         .substring(2)}.${fileExt}`;
 
       // Try different bucket names in case user-images doesn't exist
-      let bucketName = "user-images";
-      let { data, error } = await supabase.storage
+      const bucketName = "user-images";
+      const { error } = await supabase.storage
         .from(bucketName)
         .upload(fileName, file);
 

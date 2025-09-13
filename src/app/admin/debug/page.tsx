@@ -3,14 +3,39 @@
 import { useState, useEffect } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 
+interface DebugInfo {
+  supabaseConnection?: string;
+  adminProfile?: {
+    exists: boolean;
+    data: unknown;
+    error?: string;
+  };
+  eventCreation?: {
+    success: boolean;
+    data: unknown;
+    error?: string;
+  };
+  eventsFetch?: {
+    success: boolean;
+    count: number;
+    error?: string;
+  };
+  imagesFetch?: {
+    success: boolean;
+    count: number;
+    error?: string;
+  };
+  generalError?: string;
+}
+
 export default function DebugPage() {
-  const [debugInfo, setDebugInfo] = useState<any>({});
+  const [debugInfo, setDebugInfo] = useState<DebugInfo>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const runDebug = async () => {
       const supabase = createBrowserClient();
-      const debug: any = {};
+      const debug: DebugInfo = {};
 
       try {
         // Test 1: Check if we can connect to Supabase

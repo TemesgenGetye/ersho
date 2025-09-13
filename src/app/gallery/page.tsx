@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import { Camera, Heart, Calendar } from "lucide-react";
-import Link from "next/link";
 import ImageUploadModal from "@/components/ImageUploadModal";
 import LikeButton from "@/components/LikeButton";
 

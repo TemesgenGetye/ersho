@@ -1,17 +1,32 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { createBrowserClient } from "@/lib/supabase";
 import { Calendar, MapPin, User, ArrowLeft, Clock, Camera } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+
+interface EventDetail {
+  id: string;
+  title: string;
+  description: string | null;
+  date: string;
+  location: string;
+  image_url: string | null;
+  created_at: string;
+  created_by: string | null;
+  profiles: {
+    full_name: string;
+    email: string;
+  } | null;
+}
 
 export default function EventDetailPage() {
-  const [event, setEvent] = useState<any>(null);
+  const [event, setEvent] = useState<EventDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const params = useParams();
-  const router = useRouter();
   const supabase = createBrowserClient();
 
   useEffect(() => {
@@ -77,7 +92,7 @@ export default function EventDetailPage() {
               Event Not Found
             </h1>
             <p className="text-gray-600 mb-6">
-              {error || "The event you're looking for doesn't exist."}
+              {error || "The event you&apos;re looking for doesn&apos;t exist."}
             </p>
             <Link
               href="/events"
@@ -115,9 +130,11 @@ export default function EventDetailPage() {
         {event.image_url && (
           <div className="mb-8">
             <div className="aspect-video rounded-lg overflow-hidden shadow-lg">
-              <img
+              <Image
                 src={event.image_url}
                 alt={event.title}
+                width={800}
+                height={450}
                 className="w-full h-full object-cover"
               />
             </div>

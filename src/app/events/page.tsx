@@ -4,9 +4,24 @@ import { useState, useEffect } from "react";
 import { createBrowserClient } from "@/lib/supabase";
 import { Calendar, MapPin, User } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+
+interface Event {
+  id: string;
+  title: string;
+  description: string | null;
+  date: string;
+  location: string;
+  image_url: string | null;
+  created_at: string;
+  created_by: string | null;
+  profiles: {
+    full_name: string;
+  } | null;
+}
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createBrowserClient();
 
@@ -75,9 +90,11 @@ export default function EventsPage() {
               >
                 {event.image_url && (
                   <div className="aspect-video overflow-hidden">
-                    <img
+                    <Image
                       src={event.image_url}
                       alt={event.title}
+                      width={400}
+                      height={225}
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                     />
                   </div>
@@ -147,7 +164,7 @@ export default function EventsPage() {
               No Events Yet
             </h3>
             <p className="text-gray-600 mb-6">
-              We're working on some amazing events. Check back soon!
+              We&apos;re working on some amazing events. Check back soon!
             </p>
             <Link href="/" className="btn-primary">
               Back to Home
